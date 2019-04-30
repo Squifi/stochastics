@@ -50,7 +50,7 @@ toss_2b <- function () replicate(num_of_dice_2b,sample(OMEGA_2b,num_of_events_2b
 
 repeat_experiment <- replicate(10^5, toss_2b())
 
-mean_of_relative_frequency_2b <- mean(apply(repeat_experiment,1,function(i) if(i[1] == 6 || i[2] == 6) 1 else 0))
+mean_of_relative_frequency_2b <- mean(apply(repeat_experiment,1,function(i) if(is.element(i,6)) 1 else 0))
 
 comparison_2 <- c(mean_of_relative_frequency_2a, mean_of_relative_frequency_2b)
 print("For 2a the probability is: ")
@@ -64,5 +64,10 @@ print(comparison_2[2])
 lottery_numbers <- c(2,16,5,20,7,5)
 lottery <- function() sample(1:49,6,replace=FALSE)
 
-have_i_won_something <- replicate(10^2,is.element(lottery(),lottery_numbers))
+have_i_won_something <- replicate(10^4,sum(is.element(lottery(),lottery_numbers)))
+
+# TODO: Hier fehlt noch ein mean der einzelnen Gewinne
+
+hist(have_i_won_something, main="Aufgabe 3", xlab="# of correct guesses", ylab="How many times");
+
 
