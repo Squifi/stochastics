@@ -66,7 +66,8 @@ lottery <- function() sample(1:49,6,replace=FALSE)
 
 have_i_won_something <- replicate(10^4,sum(is.element(lottery(),lottery_numbers)))
 
-# TODO: Hier fehlt noch ein mean der einzelnen Gewinne
+print("Die Wahrscheinlichkeiten von keinen richtigen =1 bis 6 richtige = 7")
+print(lapply(0:6, function(i) mean(is.element(have_i_won_something,i))))
 
 hist(have_i_won_something, main="Aufgabe 3", xlab="# of correct guesses", ylab="How many times");
 
