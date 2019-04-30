@@ -2,7 +2,6 @@
 
 ################################## Question 1
 # 0 = tails, 1 = heads
-firstUrn <- c(0,1)
 n <- 1
 nsamples <- 10^4
 
@@ -11,17 +10,18 @@ nsamples <- 10^4
 # simulieren
 
 # sample OMEGA={0:1}=0,1 und wird einmal wdh, braucht man also nicht replicate 
-result_one_toss <- sample(0:1,1)
+result_one_toss <- sample(0:1,n)
 
 # Hier brauchen wir ein replace im sample ansonsten funktioniert es nicht
-result_n_tosses <- sample(0:1,nsamples,replace=TRUE)
+# Possibly unfair mapped by the probability
+result_n_tosses <- sample(0:1,nsamples,replace=TRUE, c(0.4,0.6))
 
-resultOneBinom = rbinom(nsamples,1,0.5) 
+resultOneBinom = rbinom(nsamples,1,0.6) 
 
 
 # xlab fuer die x achse, ylab fuer die y achse, main fuer den Titel der Tabelle
 hist(result_n_tosses, xlab="Results", ylab="Toss result", main="10^3 wuerfe")
-hist(result_one_toss, main="One Toss")
+# Doesn't make sense to display => hist(result_one_toss, main="One Toss")
 hist(resultOneBinom, xlab="Binomial Toss")
 
 
@@ -34,10 +34,10 @@ N_2a <- 10^5
 
 # simuliere hier lediglich die 4 simultanen Wuerfe
 # Wenn ihr den Befehl ohne hist ausfuehrt seht ihr die Tabelle, passt genau auf die Anfrage
-toss_dice_2a <- replicate(num_of_dice_2a,sample(OMEGA_2a,N_2a,replace=TRUE))
+toss_four_dice_2a <- replicate(num_of_dice_2a,sample(OMEGA_2a,N_2a,replace=TRUE))
 
-# Nur plotting
-hist(toss_dice_2a, main="Question 2a", xlab="Dice value", ylab="# of throws")
+mean_of_relative_frequency_2a <- mean(apply(toss_four_dice_2a,1,function(i) if(i[1]==6 || i[2]==6 || i[3]==6 || i[4]==6) 1 else 0))
+
 
 
 ################################### Question 2 b.)
@@ -46,6 +46,20 @@ num_of_dice_2b <- 2
 num_of_events_2b <- 24
 
 # Wenn ihr den Befehl ohne hist ausfuehrt seht ihr die Tabelle, passt genau auf die Anfrage
-toss_dice_2b <- replicate(num_of_dice_2b,sample(OMEGA_2b,num_of_events_2b, replace=TRUE))
+toss_2b <- function () replicate(num_of_dice_2b,sample(OMEGA_2b,num_of_events_2b, replace=TRUE))
 
-hist(toss_dice_2b, main="Question 2b", xlab="Dice value", ylab="# of tosses")
+repeat_experiment <- replicate(10^5, toss_2b())
+
+mean_of_relative_frequency_2b <- mean(apply(repeat_experiment,1,function(i) if(i[1] == 6 || i[2] == 6) 1 else 0))
+
+comparison_2 <- c(mean_of_relative_frequency_2a, mean_of_relative_frequency_2b)
+print("For 2a the probability is: " comparison_2[1])
+print(comparison_2[1])
+print("and for 2b:") 
+print(comparison_2[2])
+
+
+################################ Question 3.)
+
+lottery_numbers = [2,16,5,20,7,5]
+
