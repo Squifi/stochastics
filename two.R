@@ -37,12 +37,19 @@ x <- seq(min(X1), max(X1),.1)
 lines(x,dnorm(x))
 
 # Aufgabe 4
-SEED <- as.integer(Sys.time())
-lcg.recursive <- function(a,b,m,n,x_k) {
+x_0 <- as.integer(Sys.time())
+lcg.recursive <- function(a,b,m,n,SEED) {
 	return ((a*x_k+b)%%m)
 }
 
 LCG <- function(a,b,m,n,SEED) {
-	x_0 <- SEED	
+	seed = lcg.recursive(a,b,m,n,x_0)
+	n = n-1
+	while(n>0) {
+		lcg.recursive(a,b,m,n,seed)
+		n = n-1
+	}
+	return (seed)	
 }
-		
+
+# Aufgabe 5
